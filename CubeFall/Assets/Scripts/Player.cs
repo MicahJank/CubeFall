@@ -7,6 +7,7 @@ public class Player : MonoBehaviour
 {
     Rigidbody rigidBody;
 
+    AudioSource jumpSound;
 
     [SerializeField] private float _jumpForce = 10f;
 
@@ -17,6 +18,7 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        jumpSound = GetComponent<AudioSource>();
         rigidBody = GetComponent<Rigidbody>();
         rotationState = Rotation.noRotation;
         
@@ -32,6 +34,7 @@ public class Player : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            jumpSound.Play();
             rigidBody.AddRelativeForce(Vector3.up * _jumpForce, ForceMode.VelocityChange); // VelocityChange so the force ignores mass
         }
 
