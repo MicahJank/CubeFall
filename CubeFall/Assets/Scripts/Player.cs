@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -68,10 +66,15 @@ public class Player : MonoBehaviour
     {
         switch (other.gameObject.tag)
         {
-            case "Friendly": Debug.Log("OK");
+            case "Friendly":
+                break;
+
+            case "Finish": Debug.Log("Hit Finish");
+                SceneManager.LoadScene(1);
                 break;
 
             default: Debug.Log("Dead"); // TODO kill player
+                SceneManager.LoadScene(0);
                 break;
         }
     }
