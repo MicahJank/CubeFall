@@ -192,8 +192,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3110482981219537811}
   - component: {fileID: 938018113}
-  - component: {fileID: 3395342753806005660}
   - component: {fileID: 938018115}
+  - component: {fileID: 4083177468826726772}
   m_Layer: 0
   m_Name: PlayerCube
   m_TagString: Untagged
@@ -234,7 +234,25 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 120
   m_CollisionDetection: 0
---- !u!82 &3395342753806005660
+--- !u!114 &938018115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3110482981219537810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 501ad84452d3bb84ca21baa3a55ac4e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  jumpSound: {fileID: 8300000, guid: 2c5292ba5cf254919a6b9e2b18e04f49, type: 3}
+  preDeathSound: {fileID: 8300000, guid: 8bfe684e17eb5b241964b6ce27601802, type: 3}
+  deathSound: {fileID: 8300000, guid: c32f98ca2cd98cb48a817b793820c86b, type: 3}
+  beatLevelSound: {fileID: 8300000, guid: 9290a7f1a5a74d044a54093693bcfd4b, type: 3}
+  _jumpForce: 500
+  cubeRotation: 300
+--- !u!82 &4083177468826726772
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -244,8 +262,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 2c5292ba5cf254919a6b9e2b18e04f49, type: 3}
-  m_PlayOnAwake: 0
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -258,7 +276,7 @@ AudioSource:
   MaxDistance: 500
   Pan2D: 0
   rolloffMode: 0
-  BypassEffects: 1
+  BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
   rolloffCustomCurve:
@@ -330,20 +348,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &938018115
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3110482981219537810}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 501ad84452d3bb84ca21baa3a55ac4e4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _jumpForce: 10
-  cubeRotation: 300
 --- !u!1 &3110482981878098735
 GameObject:
   m_ObjectHideFlags: 0
