@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
@@ -12,9 +13,14 @@ public class Player : MonoBehaviour
     [SerializeField] AudioClip deathSound;
     [SerializeField] AudioClip beatLevelSound;
 
+    [SerializeField] ParticleSystem jumpParticles;
+    [SerializeField] ParticleSystem victoryParticles;
+    [SerializeField] ParticleSystem deathParticles;
 
 
-    [SerializeField] private float _jumpForce = 10f;
+    float jumpSpeedOnFrame;
+    private float initialJumpForce;
+   [SerializeField] private float _jumpForce = 10f;
     [SerializeField] private float cubeRotation = 100f;
 
     // Will determine if the player can rotate left or right
@@ -27,6 +33,7 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        initialJumpForce = _jumpForce;
         audioSource = GetComponent<AudioSource>();
         rigidBody = GetComponent<Rigidbody>();
         rotationState = Rotation.noRotation;     
@@ -38,9 +45,9 @@ public class Player : MonoBehaviour
         if (playerState == State.Alive)
         {
             Rotate();
-            Jumping();
+            RespondToJumpInput();
         }
-       
+
     }
 
     private void Rotate()
@@ -63,15 +70,34 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void Jumping() // TODO make better Jump - longer spacebar held the higher the jump
+    private void RespondToJumpInput()
     {
-        float jumpSpeedOnFrame = _jumpForce * Time.deltaTime;
         if (Input.GetKeyDown(KeyCode.Space))
         {
             rigidBody.velocity = new Vector3(0f, 0f, 0f);          
-            audioSource.PlayOneShot(jumpSound);
-            rigidBody.AddRelativeForce(Vector3.up * jumpSpeedOnFrame, ForceMode.VelocityChange); // VelocityChange so the force ignores mass
+            rigidBody.velocity = new Vector3(0f, 0f, 0f);
+            PlayJumpSound();
         }
+        if (Input.GetKey(KeyCode.Space))
+    {
+        if (!audioSource.isPlaying)
+        {
+            audioSource.PlayOneShot(jumpSound);
+        }
+    }
+
+    private void Jump()
+    {
+        if (_jumpForce <= 0f)
+        {
+            _jumpForce = 0f;
+        }
+
+        jumpSpeedOnFrame = _jumpForce * Time.deltaTime;
+        rigidBody.AddRelativeForce(Vector3.up * jumpSpeedOnFrame, ForceMode.VelocityChange); // VelocityChange so the force ignores mass
+       
+        jumpParticles.Play();
+        
     }
 
     private void OnCollisionEnter(Collision other)
