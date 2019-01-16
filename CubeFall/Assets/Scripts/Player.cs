@@ -74,11 +74,23 @@ public class Player : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            rigidBody.velocity = new Vector3(0f, 0f, 0f);          
             rigidBody.velocity = new Vector3(0f, 0f, 0f);
             PlayJumpSound();
         }
         if (Input.GetKey(KeyCode.Space))
+        {
+            _jumpForce -= 10f;
+            Jump();
+        }
+        else
+        {
+            _jumpForce = initialJumpForce;
+            jumpParticles.Stop();
+        }
+
+    }
+
+    private void PlayJumpSound()
     {
         if (!audioSource.isPlaying)
         {
