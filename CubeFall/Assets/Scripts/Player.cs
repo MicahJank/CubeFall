@@ -22,6 +22,7 @@ public class Player : MonoBehaviour
     private float initialJumpForce;
    [SerializeField] private float _jumpForce = 10f;
     [SerializeField] private float cubeRotation = 100f;
+    [SerializeField] float levelLoadDelay = 2f;
 
     // Will determine if the player can rotate left or right
     enum Rotation { Left, Right, noRotation };
@@ -136,16 +137,19 @@ public class Player : MonoBehaviour
         playerState = State.lvlSwitching;
         audioSource.Stop();
         audioSource.PlayOneShot(beatLevelSound);
-        Invoke("LoadNextLevel", 3f); // Invoke is a lesser form of CoRoutines
+        victoryParticles.Play();
+        
+        Invoke("LoadNextLevel", levelLoadDelay); // Invoke is a lesser form of CoRoutines
     }
 
-    private void Die()
+    private void Die() //TODO stop jump particle from playing after hitting walls
     {
-        Debug.Log("Dead"); // TODO kill player
+        Debug.Log("Dead");
         playerState = State.Dying;
         audioSource.Stop();
         audioSource.PlayOneShot(deathSound); // TODO predeath sound needs to play before this       
-        Invoke("LoadFirstLevel", 2f);
+        deathParticles.Play();
+        Invoke("LoadFirstLevel", levelLoadDelay);
     }
 
     private void LoadNextLevel()
