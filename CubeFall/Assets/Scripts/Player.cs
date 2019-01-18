@@ -17,7 +17,6 @@ public class Player : MonoBehaviour
     [SerializeField] ParticleSystem victoryParticles;
     [SerializeField] ParticleSystem deathParticles;
 
-
     float jumpSpeedOnFrame;
     private float initialJumpForce;
    [SerializeField] private float _jumpForce = 10f;
@@ -142,14 +141,20 @@ public class Player : MonoBehaviour
         Invoke("LoadNextLevel", levelLoadDelay); // Invoke is a lesser form of CoRoutines
     }
 
-    private void Die() //TODO stop jump particle from playing after hitting walls
+    private void Die()
     {
         Debug.Log("Dead");
         playerState = State.Dying;
         audioSource.Stop();
         audioSource.PlayOneShot(deathSound); // TODO predeath sound needs to play before this       
-        deathParticles.Play();
+        BeginDeathParticles();
         Invoke("LoadFirstLevel", levelLoadDelay);
+    }
+
+    private void BeginDeathParticles()
+    {
+        jumpParticles.Stop();
+        deathParticles.Play();
     }
 
     private void LoadNextLevel()
