@@ -27,8 +27,9 @@ public class Player : MonoBehaviour
     enum Rotation { Left, Right, noRotation };
     Rotation rotationState;
 
-    enum State { Alive, Dying, lvlSwitching };
-    State playerState = State.Alive;
+    bool isTransitioning = false;
+
+    private bool _debugMode = false;
 
     // Start is called before the first frame update
     void Start()
@@ -42,12 +43,26 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (playerState == State.Alive)
+        if (!isTransitioning)
         {
             Rotate();
             RespondToJumpInput();
         }
+        if (Debug.isDebugBuild) // checks if the final build of the game is a development build or not
+        {
+            RunDebugMode();
+        }
+    }
 
+    private void RunDebugMode()
+    {
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            LoadNextLevel();
+        } else if (Input.GetKeyDown(KeyCode.C))
+        {
+            _debugMode = !_debugMode; // toggle the boolean
+        }
     }
 
     private void Rotate()
@@ -114,7 +129,7 @@ public class Player : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        if (playerState != State.Alive) { return; } // ignore collisons on death
+        if (isTransitioning || _debugMode == true) { return; } // ignore collisons on death
  
         switch (other.gameObject.tag)
         {
@@ -133,7 +148,7 @@ public class Player : MonoBehaviour
 
     private void Win()
     {
-        playerState = State.lvlSwitching;
+        isTransitioning = true;
         audioSource.Stop();
         audioSource.PlayOneShot(beatLevelSound);
         victoryParticles.Play();
@@ -143,12 +158,11 @@ public class Player : MonoBehaviour
 
     private void Die()
     {
-        Debug.Log("Dead");
-        playerState = State.Dying;
+        isTransitioning = true;
         audioSource.Stop();
         audioSource.PlayOneShot(deathSound); // TODO predeath sound needs to play before this       
         BeginDeathParticles();
-        Invoke("LoadFirstLevel", levelLoadDelay);
+        Invoke("ReloadCurrentLevel", levelLoadDelay);
     }
 
     private void BeginDeathParticles()
@@ -159,11 +173,20 @@ public class Player : MonoBehaviour
 
     private void LoadNextLevel()
     {
-        SceneManager.LoadScene(1); // TODO allow for more than 2 levels
+        int totalSceneIndex = SceneManager.sceneCountInBuildSettings; // total scene index will be equal to last level in game
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        int nextSceneIndex = currentSceneIndex + 1;
+
+        if (nextSceneIndex == totalSceneIndex)
+        {
+            nextSceneIndex = 0; // loop back to level 1 when you reach the end.
+        }
+        SceneManager.LoadScene(nextSceneIndex);
     }
 
-    private void LoadFirstLevel()
+    private void ReloadCurrentLevel()
     {
-        SceneManager.LoadScene(0);
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadScene(currentSceneIndex);
     }
 }
