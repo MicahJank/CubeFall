@@ -23,6 +23,8 @@ public class Player : MonoBehaviour
     [SerializeField] private float cubeRotation = 100f;
     [SerializeField] float levelLoadDelay = 2f;
 
+    private Vector2 touchOrigin = -Vector2.one; // For touch controls
+
     // Will determine if the player can rotate left or right
     enum Rotation { Left, Right, noRotation };
     Rotation rotationState;
@@ -160,7 +162,7 @@ public class Player : MonoBehaviour
     {
         isTransitioning = true;
         audioSource.Stop();
-        audioSource.PlayOneShot(deathSound); // TODO predeath sound needs to play before this       
+        audioSource.PlayOneShot(deathSound);
         BeginDeathParticles();
         Invoke("ReloadCurrentLevel", levelLoadDelay);
     }
